@@ -118,13 +118,11 @@ public class EntryActivity extends Activity implements View.OnTouchListener,
             final Drawable drawableCommon =
                     getResources().getDrawable(PARTICLE_INFOS[mIndex].particleRes);
             mParticleSystem.setColorFilterMode(PARTICLE_INFOS[mIndex].colorFilter);
-            mParticleSystem.setBlendMode(PorterDuff.Mode.ADD);
             mParticleSystem.setParticleFactory(new ParticleSystem.ParticleFactory() {
                 @Override
                 public Particle create(ParticleSystem particleSystem) {
                     Drawable drawable = drawableCommon.getConstantState().newDrawable();
-                    DrawableParticle particle = new DrawableParticle(particleSystem, drawable);
-                    return particle;
+                    return new DrawableParticle(particleSystem, drawable);
                 }
             });
         }

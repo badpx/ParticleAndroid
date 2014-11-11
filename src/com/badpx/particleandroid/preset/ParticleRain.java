@@ -30,7 +30,7 @@ public class ParticleRain extends ParticleSystem {
     }
 
     public ParticleRain(int horizontalRang) {
-        this(horizontalRang, 150);
+        this(horizontalRang, 100);
     }
 
     public ParticleRain(int horizontalRang, int numOfParticles) {

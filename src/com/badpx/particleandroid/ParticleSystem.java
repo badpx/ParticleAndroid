@@ -161,7 +161,7 @@ public class ParticleSystem implements Runnable {
     }
 
     public ParticleSystem() {
-        setup(150);
+        setup(100);
     }
 
     public ParticleSystem(int numberOfParticles) {
@@ -601,9 +601,7 @@ public class ParticleSystem implements Runnable {
 
         // position
         particle.pos.x = mSourcePosition.x + mPosVar.x * randomMinus1To1();
-
         particle.pos.y = mSourcePosition.y + mPosVar.y * randomMinus1To1();
-
 
         // Color
         int start;

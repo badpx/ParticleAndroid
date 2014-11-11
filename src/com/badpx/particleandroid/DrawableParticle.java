@@ -14,6 +14,7 @@
 package com.badpx.particleandroid;
 
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 
@@ -52,6 +53,7 @@ public class DrawableParticle extends Particle {
             } else {
                 mDrawable.clearColorFilter();
             }
+            mDrawable.setAlpha(Color.alpha(color));
 
             if (null != mPaint && mPaint.getXfermode() != parent.mXfermode) {
                 mPaint.setXfermode(parent.mXfermode);

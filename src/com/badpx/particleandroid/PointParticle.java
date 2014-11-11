@@ -32,9 +32,8 @@ public class PointParticle extends Particle {
         if (null != parent.mColorFilterMode) {
             mPaint.setColorFilter(
                     new PorterDuffColorFilter(color, parent.mColorFilterMode));
-        } else {
-            mPaint.setColor(color);
         }
+        mPaint.setColor(color);
 
         if (mPaint.getXfermode() != parent.mXfermode) {
             mPaint.setXfermode(parent.mXfermode);

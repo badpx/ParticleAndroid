@@ -75,6 +75,6 @@ public class ParticleFire extends ParticleSystem {
         mEmissionRate = mTotalParticles / mLife;
 
         // color of particles
-        mStartColor = Colour.argb(0.7f, 0.76f, 0.25f, 0.12f);
+        mStartColor = Colour.argb(1.0f, 0.76f, 0.25f, 0.12f);
     }
 }
