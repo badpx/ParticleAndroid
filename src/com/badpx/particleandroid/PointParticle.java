@@ -27,6 +27,6 @@ public class PointParticle extends Particle {
     @Override
     public void draw(Canvas canvas) {
         mPaint.setColor(color);
-        canvas.drawCircle(0, 0, size, mPaint);
+        canvas.drawCircle(0, 0, size / 2, mPaint);
     }
 }

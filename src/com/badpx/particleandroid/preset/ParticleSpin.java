@@ -70,8 +70,8 @@ public class ParticleSpin extends ParticleSystem {
         setEndColorVar(Colour.argb(0.2f, 0.1f, 0.1f, 0.1f));
 
         // size factor
-        setStartSize(1.5f);
-        setStartSizeVar(0.5f);
+        setStartSize(32f);
+        setStartSizeVar(0);
         setEndSize(END_SIZE_EQUAL_TO_START_SIZE);
 
         // emits per second

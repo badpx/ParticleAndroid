@@ -72,8 +72,8 @@ public class ParticleRain extends ParticleSystem {
         mLifeVar = 0;
 
         // size, in pixels
-        mStartSize = 1.5f;
-        mStartSizeVar = 0.5f;
+        mStartSize = 4.0f;
+        mStartSizeVar = 2.0f;
         mEndSize = END_SIZE_EQUAL_TO_START_SIZE;
 
         // emits per second

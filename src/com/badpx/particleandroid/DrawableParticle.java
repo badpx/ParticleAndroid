@@ -47,15 +47,16 @@ public class DrawableParticle extends Particle {
                 mDrawable.setAlpha(Color.alpha(color));
             }
 
-            int pivotX = (mDrawable.getBounds().width() >> 1);
-            int pivotY = (mDrawable.getBounds().height() >> 1);
+            mDrawable.setBounds(0, 0, (int)size, (int)size);
+            float pivotX = (size / 2);
+            float pivotY = pivotX;
 
             canvas.save();
 
             canvas.translate(-pivotX, -pivotY);
-            if (1.0f != size) {
+/*            if (1.0f != size) {
                 canvas.scale(size, size, pivotX, pivotY);
-            }
+            }*/
             if (0 != rotation) {
                 canvas.rotate(rotation, pivotX, pivotY);
             }

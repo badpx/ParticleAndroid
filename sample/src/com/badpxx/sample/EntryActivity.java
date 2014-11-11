@@ -121,8 +121,6 @@ public class EntryActivity extends Activity implements View.OnTouchListener,
                 @Override
                 public Particle create(ParticleSystem particleSystem) {
                     Drawable drawable = drawableCommon.getConstantState().newDrawable();
-                    drawable.setBounds(0, 0,
-                            drawableCommon.getIntrinsicWidth(), drawableCommon.getIntrinsicHeight());
                     DrawableParticle particle = new DrawableParticle(drawable);
                     particle.setColorFilterMode(PARTICLE_INFOS[mIndex].blendMode);
                     return particle;

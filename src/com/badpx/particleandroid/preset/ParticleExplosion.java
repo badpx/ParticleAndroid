@@ -67,8 +67,8 @@ public class ParticleExplosion extends ParticleSystem {
         mLifeVar = 1;
 
         // size, in pixels
-        mStartSize = 1.0f;
-        mStartSizeVar = 0.25f;
+        mStartSize = 15.0f;
+        mStartSizeVar = 10.0f;
         mEndSize = END_SIZE_EQUAL_TO_START_SIZE;
 
         // emits per second

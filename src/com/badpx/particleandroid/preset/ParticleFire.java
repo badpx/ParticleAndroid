@@ -25,7 +25,7 @@ import com.badpx.particleandroid.utils.Point;
 public class ParticleFire extends ParticleSystem {
 
     public ParticleFire() {
-        super();
+        super(77);
     }
 
     public ParticleFire(int num) {
@@ -51,29 +51,30 @@ public class ParticleFire extends ParticleSystem {
         this.modeA.radialAccelVar = 0;
 
         // Gravity Mode: speed of particles
-        this.modeA.speed = 60;
-        this.modeA.speedVar = 20;
+        this.modeA.speed = 225;
+        this.modeA.speedVar = 30;
 
         // starting angle
         mAngle = 90;
         mAngleVar = 10;
 
-        // emitter position
-        this.mPosVar = new Point(40, 20);
+        // emitter position variance
+        this.mPosVar = new Point(7, 7);
+//        this.mSourcePosition = new Point(7, 7);
 
         // life of particles
-        mLife = 4;
-        mLifeVar = 0.25f;
+        mLife = 1;
+        mLifeVar = 0;
 
         // size, in pixels
-        mStartSize = 1.0f;
-        mStartSizeVar = 0.5f;
+        mStartSize = 64.0f;
+        mStartSizeVar = 5.0f;
         mEndSize = 0;
 
         // emits per frame
         mEmissionRate = mTotalParticles / mLife;
 
         // color of particles
-        mStartColor = Colour.argb(1f, 0.76f, 0.25f, 0.12f);
+        mStartColor = Colour.argb(0.7f, 0.76f, 0.25f, 0.12f);
     }
 }
