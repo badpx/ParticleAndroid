@@ -22,6 +22,10 @@ import com.badpx.particleandroid.utils.Colour;
  * Date: 14/11/10
  */
 public class ParticleSpin extends ParticleSystem {
+    public ParticleSpin() {
+        super();
+    }
+
     public ParticleSpin(int numOfParticles) {
         super(numOfParticles);
     }
@@ -33,7 +37,7 @@ public class ParticleSpin extends ParticleSystem {
         setDuration(DURATION_INFINITY);
 
         // radius mode
-        setEmitterMode(EmitMode.MODE_RADIUS);
+        setEmitterMode(EmitterMode.MODE_RADIUS);
 
         // radius mode: start and end radius in pixels
         setStartRadius(0);

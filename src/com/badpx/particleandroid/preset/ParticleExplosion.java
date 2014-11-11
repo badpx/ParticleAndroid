@@ -24,6 +24,10 @@ import com.badpx.particleandroid.utils.Point;
  * Date: 14/11/10
  */
 public class ParticleExplosion extends ParticleSystem {
+    public ParticleExplosion() {
+        super();
+    }
+
     public ParticleExplosion(int numOfParticles) {
         super(numOfParticles);
     }
@@ -35,7 +39,7 @@ public class ParticleExplosion extends ParticleSystem {
         // duration
         mDuration = -1f;
 
-        mEmitterMode = EmitMode.MODE_GRAVITY;
+        mEmitterMode = EmitterMode.MODE_GRAVITY;
 
         // Gravity Mode: gravity
         modeA.gravity = new Point(0, 0);

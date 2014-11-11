@@ -25,6 +25,10 @@ import com.badpx.particleandroid.utils.Point;
 public class ParticleRain extends ParticleSystem {
     private int mHorizontal;
 
+    public ParticleRain() {
+        this(240);
+    }
+
     public ParticleRain(int horizontalRang) {
         this(horizontalRang, 150);
     }
@@ -40,7 +44,7 @@ public class ParticleRain extends ParticleSystem {
         // duration
         mDuration = DURATION_INFINITY;
 
-        setEmitterMode(EmitMode.MODE_GRAVITY);
+        setEmitterMode(EmitterMode.MODE_GRAVITY);
 
         // Gravity Mode: gravity
         setGravity(new Point(10,-10));
@@ -68,7 +72,7 @@ public class ParticleRain extends ParticleSystem {
         mLifeVar = 0;
 
         // size, in pixels
-        mStartSize = 1.0f;
+        mStartSize = 1.5f;
         mStartSizeVar = 0.5f;
         mEndSize = END_SIZE_EQUAL_TO_START_SIZE;
 

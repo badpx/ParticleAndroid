@@ -48,7 +48,7 @@ public final class ParticleFpsView extends ParticleSystemView {
         mPaint.setColor(Color.GRAY);
         mPaint.setTextSize(32);
         mPosX = 50;
-        mPoxY = getBottom() - 50;
+        mPoxY = 50;
     }
 
     @Override

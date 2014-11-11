@@ -40,8 +40,8 @@ public class ParticleFire extends ParticleSystem {
         mDuration = -1;
 
         // Gravity Mode
-        this.mEmitterMode = EmitMode.MODE_GRAVITY;
-        this.mMoveType = MoveType.MOVE_FREE;
+        this.mEmitterMode = EmitterMode.MODE_GRAVITY;
+        this.mPositionType = PositionType.POSITION_FREE;
 
         // Gravity Mode: gravity
         this.modeA.gravity = new Point();

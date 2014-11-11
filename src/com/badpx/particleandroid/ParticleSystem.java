@@ -30,12 +30,12 @@ import java.util.Random;
  * Date: 14/11/6
  */
 public class ParticleSystem implements Runnable {
-    public enum MoveType {
-        MOVE_FREE,
-        MOVE_GROUP,
+    public enum PositionType {
+        POSITION_FREE,
+        POSITION_GROUP,
     }
 
-    public enum EmitMode {
+    public enum EmitterMode {
         MODE_GRAVITY,
         MODE_RADIUS
     }
@@ -82,8 +82,8 @@ public class ParticleSystem implements Runnable {
     // Number of allocated particles
     int mAllocatedParticles;
     protected int mParticleCount;
-    protected MoveType mMoveType;
-    protected EmitMode mEmitterMode;
+    protected PositionType mPositionType;
+    protected EmitterMode mEmitterMode;
     protected int mInterval = 20;
     protected Handler mHandler;
     /** Is the emitter active */
@@ -176,14 +176,15 @@ public class ParticleSystem implements Runnable {
         modeB = new ModeB();
         mTotalParticles = numberOfParticles;
         mAllocatedParticles = numberOfParticles;
-        mMoveType = MoveType.MOVE_FREE;
-        mEmitterMode = EmitMode.MODE_GRAVITY;
+        mPositionType = PositionType.POSITION_FREE;
+        mEmitterMode = EmitterMode.MODE_GRAVITY;
 
         mHandler = new Handler();
         mHandler.post(this);
     }
 
     public void tearDown() {
+        stopSystem();
         mHandler.removeCallbacks(this);
     }
 
@@ -207,134 +208,134 @@ public class ParticleSystem implements Runnable {
 
     // ParticleSystem - Properties of Gravity Mode
     public void setTangentialAccel(float t) {
-        MyAssert(mEmitterMode == EmitMode.MODE_GRAVITY, "Particle Mode should be Gravity");
+        MyAssert(mEmitterMode == EmitterMode.MODE_GRAVITY, "Particle Mode should be Gravity");
         modeA.tangentialAccel = t;
     }
 
     public float getTangentialAccel() {
-        MyAssert(mEmitterMode == EmitMode.MODE_GRAVITY, "Particle Mode should be Gravity");
+        MyAssert(mEmitterMode == EmitterMode.MODE_GRAVITY, "Particle Mode should be Gravity");
         return modeA.tangentialAccel;
     }
 
     public void setTangentialAccelVar(float t) {
-        MyAssert(mEmitterMode == EmitMode.MODE_GRAVITY, "Particle Mode should be Gravity");
+        MyAssert(mEmitterMode == EmitterMode.MODE_GRAVITY, "Particle Mode should be Gravity");
         modeA.tangentialAccelVar = t;
     }
 
     public float getTangentialAccelVar() {
-        MyAssert(mEmitterMode == EmitMode.MODE_GRAVITY, "Particle Mode should be Gravity");
+        MyAssert(mEmitterMode == EmitterMode.MODE_GRAVITY, "Particle Mode should be Gravity");
         return modeA.tangentialAccelVar;
     }
 
     public void setRadialAccel(float t) {
-        MyAssert(mEmitterMode == EmitMode.MODE_GRAVITY, "Particle Mode should be Gravity");
+        MyAssert(mEmitterMode == EmitterMode.MODE_GRAVITY, "Particle Mode should be Gravity");
         modeA.radialAccel = t;
     }
 
     public float getRadialAccel() {
-        MyAssert(mEmitterMode == EmitMode.MODE_GRAVITY, "Particle Mode should be Gravity");
+        MyAssert(mEmitterMode == EmitterMode.MODE_GRAVITY, "Particle Mode should be Gravity");
         return modeA.radialAccel;
     }
 
     public void setRadialAccelVar(float t) {
-        MyAssert(mEmitterMode == EmitMode.MODE_GRAVITY, "Particle Mode should be Gravity");
+        MyAssert(mEmitterMode == EmitterMode.MODE_GRAVITY, "Particle Mode should be Gravity");
         modeA.radialAccelVar = t;
     }
 
     public float getRadialAccelVar() {
-        MyAssert(mEmitterMode == EmitMode.MODE_GRAVITY, "Particle Mode should be Gravity");
+        MyAssert(mEmitterMode == EmitterMode.MODE_GRAVITY, "Particle Mode should be Gravity");
         return modeA.radialAccelVar;
     }
 
     public void setGravity(Point g) {
-        MyAssert(mEmitterMode == EmitMode.MODE_GRAVITY, "Particle Mode should be Gravity");
+        MyAssert(mEmitterMode == EmitterMode.MODE_GRAVITY, "Particle Mode should be Gravity");
         modeA.gravity = g;
     }
 
     public Point getGravity() {
-        MyAssert(mEmitterMode == EmitMode.MODE_GRAVITY, "Particle Mode should be Gravity");
+        MyAssert(mEmitterMode == EmitterMode.MODE_GRAVITY, "Particle Mode should be Gravity");
         return modeA.gravity;
     }
 
     public void setSpeed(float speed)
     {
-        MyAssert(mEmitterMode == EmitMode.MODE_GRAVITY, "Particle Mode should be Gravity");
+        MyAssert(mEmitterMode == EmitterMode.MODE_GRAVITY, "Particle Mode should be Gravity");
         modeA.speed = speed;
     }
 
     public float getSpeed() {
-        MyAssert(mEmitterMode == EmitMode.MODE_GRAVITY, "Particle Mode should be Gravity");
+        MyAssert(mEmitterMode == EmitterMode.MODE_GRAVITY, "Particle Mode should be Gravity");
         return modeA.speed;
     }
 
     public void setSpeedVar(float speedVar) {
-        MyAssert(mEmitterMode == EmitMode.MODE_GRAVITY, "Particle Mode should be Gravity");
+        MyAssert(mEmitterMode == EmitterMode.MODE_GRAVITY, "Particle Mode should be Gravity");
         modeA.speedVar = speedVar;
     }
 
     public float getSpeedVar() {
-        MyAssert(mEmitterMode == EmitMode.MODE_GRAVITY, "Particle Mode should be Gravity");
+        MyAssert(mEmitterMode == EmitterMode.MODE_GRAVITY, "Particle Mode should be Gravity");
         return modeA.speedVar;
     }
 
     // ParticleSystem - Properties of Radius Mode
     public void setStartRadius(float startRadius) {
-        MyAssert(mEmitterMode == EmitMode.MODE_RADIUS, "Particle Mode should be Radius");
+        MyAssert(mEmitterMode == EmitterMode.MODE_RADIUS, "Particle Mode should be Radius");
         modeB.startRadius = startRadius;
     }
 
     public float getStartRadius() {
-        MyAssert(mEmitterMode == EmitMode.MODE_RADIUS, "Particle Mode should be Radius");
+        MyAssert(mEmitterMode == EmitterMode.MODE_RADIUS, "Particle Mode should be Radius");
         return modeB.startRadius;
     }
 
     public void setStartRadiusVar(float startRadiusVar) {
-        MyAssert(mEmitterMode == EmitMode.MODE_RADIUS, "Particle Mode should be Radius");
+        MyAssert(mEmitterMode == EmitterMode.MODE_RADIUS, "Particle Mode should be Radius");
         modeB.startRadiusVar = startRadiusVar;
     }
 
     public float getStartRadiusVar() {
-        MyAssert(mEmitterMode == EmitMode.MODE_RADIUS, "Particle Mode should be Radius");
+        MyAssert(mEmitterMode == EmitterMode.MODE_RADIUS, "Particle Mode should be Radius");
         return modeB.startRadiusVar;
     }
 
     public void setEndRadius(float endRadius) {
-        MyAssert(mEmitterMode == EmitMode.MODE_RADIUS, "Particle Mode should be Radius");
+        MyAssert(mEmitterMode == EmitterMode.MODE_RADIUS, "Particle Mode should be Radius");
         modeB.endRadius = endRadius;
     }
 
     public float getEndRadius() {
-        MyAssert(mEmitterMode == EmitMode.MODE_RADIUS, "Particle Mode should be Radius");
+        MyAssert(mEmitterMode == EmitterMode.MODE_RADIUS, "Particle Mode should be Radius");
         return modeB.endRadius;
     }
 
     public void setEndRadiusVar(float endRadiusVar) {
-        MyAssert(mEmitterMode == EmitMode.MODE_RADIUS, "Particle Mode should be Radius");
+        MyAssert(mEmitterMode == EmitterMode.MODE_RADIUS, "Particle Mode should be Radius");
         modeB.endRadiusVar = endRadiusVar;
     }
 
     public float getEndRadiusVar() {
-        MyAssert(mEmitterMode == EmitMode.MODE_RADIUS, "Particle Mode should be Radius");
+        MyAssert(mEmitterMode == EmitterMode.MODE_RADIUS, "Particle Mode should be Radius");
         return modeB.endRadiusVar;
     }
 
     public void setRotatePerSecond(float degrees) {
-        MyAssert(mEmitterMode == EmitMode.MODE_RADIUS, "Particle Mode should be Radius");
+        MyAssert(mEmitterMode == EmitterMode.MODE_RADIUS, "Particle Mode should be Radius");
         modeB.rotatePerSecond = degrees;
     }
 
     public float getRotatePerSecond() {
-        MyAssert(mEmitterMode == EmitMode.MODE_RADIUS, "Particle Mode should be Radius");
+        MyAssert(mEmitterMode == EmitterMode.MODE_RADIUS, "Particle Mode should be Radius");
         return modeB.rotatePerSecond;
     }
 
     public void setRotatePerSecondVar(float degrees) {
-        MyAssert(mEmitterMode == EmitMode.MODE_RADIUS, "Particle Mode should be Radius");
+        MyAssert(mEmitterMode == EmitterMode.MODE_RADIUS, "Particle Mode should be Radius");
         modeB.rotatePerSecondVar = degrees;
     }
 
     public float getRotatePerSecondVar() {
-        MyAssert(mEmitterMode == EmitMode.MODE_RADIUS, "Particle Mode should be Radius");
+        MyAssert(mEmitterMode == EmitterMode.MODE_RADIUS, "Particle Mode should be Radius");
         return modeB.rotatePerSecondVar;
     }
 
@@ -516,19 +517,19 @@ public class ParticleSystem implements Runnable {
         mTotalParticles = var;
     }
 
-    public MoveType getPositionType() {
-        return mMoveType;
+    public PositionType getPositionType() {
+        return mPositionType;
     }
 
-    public void setPositionType(MoveType var) {
-        mMoveType = var;
+    public void setPositionType(PositionType var) {
+        mPositionType = var;
     }
 
-    public EmitMode getEmitterMode() {
+    public EmitterMode getEmitterMode() {
         return mEmitterMode;
     }
 
-    public void setEmitterMode(EmitMode var) {
+    public void setEmitterMode(EmitterMode var) {
         mEmitterMode = var;
     }
 
@@ -603,7 +604,7 @@ public class ParticleSystem implements Runnable {
         particle.rotation = startA;
         particle.deltaRotation = (endA - startA) / particle.timeToLive;
 
-        if( mMoveType == MoveType.MOVE_GROUP ) {
+        if( mPositionType == PositionType.POSITION_GROUP) {
             particle.startPos = new Point();
         } else {
             particle.startPos = new Point(mPosition);
@@ -613,7 +614,7 @@ public class ParticleSystem implements Runnable {
         double radians = Math.toRadians(mAngle + mAngleVar * randomMinus1To1());
 
         // Mode Gravity: A
-        if (mEmitterMode == EmitMode.MODE_GRAVITY) {
+        if (mEmitterMode == EmitterMode.MODE_GRAVITY) {
             Point v = new Point((float)Math.cos(radians), (float)Math.sin( radians ));
             float s = modeA.speed + modeA.speedVar * randomMinus1To1();
 
@@ -718,7 +719,7 @@ public class ParticleSystem implements Runnable {
                 if (p.timeToLive > 0)
                 {
                     // Mode A: gravity, direction, tangential accel & radial accel
-                    if (mEmitterMode == EmitMode.MODE_GRAVITY)
+                    if (mEmitterMode == EmitterMode.MODE_GRAVITY)
                     {
                         Point tmp, radial, tangential;
 
@@ -795,7 +796,7 @@ public class ParticleSystem implements Runnable {
             Particle p = mParticles[i];
             if (null != p) {
                 Point newPos;
-                if (mMoveType == MoveType.MOVE_GROUP) {
+                if (mPositionType == PositionType.POSITION_GROUP) {
                     newPos = Point.sub(mPosition, p.pos);
                 } else {
                     newPos = Point.sub(p.startPos, p.pos);

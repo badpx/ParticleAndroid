@@ -14,21 +14,50 @@
 package com.badpxx.sample;
 
 import android.app.Activity;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 import com.badpx.particleandroid.DrawableParticle;
 import com.badpx.particleandroid.Particle;
 import com.badpx.particleandroid.ParticleSystem;
+import com.badpx.particleandroid.preset.ParticleExplosion;
 import com.badpx.particleandroid.preset.ParticleFire;
+import com.badpx.particleandroid.preset.ParticleRain;
+import com.badpx.particleandroid.preset.ParticleSpin;
 import com.badpx.particleandroid.widget.ParticleSystemView;
 
 
-public class EntryActivity extends Activity implements View.OnTouchListener {
+public class EntryActivity extends Activity implements View.OnTouchListener,
+        View.OnClickListener {
+
+    static class ParticleInfo {
+        public Class clazz;
+        public int particleRes;
+        public PorterDuff.Mode blendMode;
+        public ParticleSystem particleSystem;
+
+        public ParticleInfo(Class sys, int res, PorterDuff.Mode mode) {
+            clazz = sys;
+            particleRes = res;
+            blendMode = mode;
+        }
+    }
+
+    private static final ParticleInfo[] PARTICLE_INFOS = {
+            new ParticleInfo(ParticleFire.class, R.drawable.halo, PorterDuff.Mode.CLEAR),
+            new ParticleInfo(ParticleExplosion.class, R.drawable.fire, PorterDuff.Mode.SRC_IN),
+            new ParticleInfo(ParticleRain.class, 0, PorterDuff.Mode.CLEAR),
+            new ParticleInfo(ParticleSpin.class, R.drawable.stars, PorterDuff.Mode.SRC_IN),
+    };
+
 
     private ParticleSystem mParticleSystem;
-    private ParticleSystemView mParticleView;
+    private int mIndex;
+    private TextView mTitle;
 
     /**
      * Called when the activity is first created.
@@ -37,41 +66,94 @@ public class EntryActivity extends Activity implements View.OnTouchListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        mParticleView = (ParticleSystemView) findViewById(R.id.ps);
+
+        mTitle = (TextView) findViewById(R.id.name);
+        Button btn = (Button) findViewById(R.id.free_mode);
+        btn.setOnClickListener(this);
+        btn = (Button) findViewById(R.id.group_mode);
+        btn.setOnClickListener(this);
+        btn = (Button) findViewById(R.id.prev);
+        btn.setOnClickListener(this);
+        btn = (Button) findViewById(R.id.next);
+        btn.setOnClickListener(this);
+
+        setupParticleSystem();
+    }
+
+    private void setupParticleSystem() {
+        ParticleSystemView particleView = (ParticleSystemView) findViewById(R.id.ps);
 
         int posX = getResources().getDisplayMetrics().widthPixels / 2;
         int posY = getResources().getDisplayMetrics().heightPixels / 2;
 
-        final Drawable drawable = getResources().getDrawable(R.drawable.halo);
-        mParticleSystem = new ParticleFire();
+        if (null != mParticleSystem) {
+            mParticleSystem.stopSystem();
+        }
+
+        mParticleSystem = PARTICLE_INFOS[mIndex].particleSystem;
+        if (null == mParticleSystem) {
+            try {
+                mParticleSystem = PARTICLE_INFOS[mIndex].particleSystem =
+                        (ParticleSystem)PARTICLE_INFOS[mIndex].clazz.newInstance();
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ;
+            }
+        } else {
+            mParticleSystem.resetSystem();
+        }
+        mTitle.setText(mParticleSystem.getClass().getSimpleName());
+
         mParticleSystem.setPosition(posX, posY);
         mParticleSystem.setInterval(1000 / 60);
-        mParticleSystem.setParticleFactory(new ParticleSystem.ParticleFactory() {
-            @Override
-            public Particle create(ParticleSystem particleSystem) {
-                Drawable particleBase = drawable.getConstantState().newDrawable();
-                particleBase.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
-                return new DrawableParticle(particleBase);
-            }
-        });
-        mParticleView.addParticleSystem(mParticleSystem);
-        mParticleView.setOnTouchListener(this);
+        int resId = PARTICLE_INFOS[mIndex].particleRes;
+        if (0 != resId) {
+            final Drawable drawableCommon =
+                    getResources().getDrawable(PARTICLE_INFOS[mIndex].particleRes);
+            mParticleSystem.setParticleFactory(new ParticleSystem.ParticleFactory() {
+                @Override
+                public Particle create(ParticleSystem particleSystem) {
+                    Drawable drawable = drawableCommon.getConstantState().newDrawable();
+                    drawable.setBounds(0, 0,
+                            drawableCommon.getIntrinsicWidth(), drawableCommon.getIntrinsicHeight());
+                    DrawableParticle particle = new DrawableParticle(drawable);
+                    particle.setColorFilterMode(PARTICLE_INFOS[mIndex].blendMode);
+                    return particle;
+                }
+            });
+        }
+        particleView.addParticleSystem(mParticleSystem);
+        particleView.setOnTouchListener(this);
     }
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         mParticleSystem.setPosition(event.getX(), event.getY());
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                mParticleSystem.startSystem();
+        return true;
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.free_mode:
+                mParticleSystem.setPositionType(ParticleSystem.PositionType.POSITION_FREE);
                 break;
-            case MotionEvent.ACTION_MOVE:
+
+            case R.id.group_mode:
+                mParticleSystem.setPositionType(ParticleSystem.PositionType.POSITION_GROUP);
                 break;
-            case MotionEvent.ACTION_CANCEL:
-            case MotionEvent.ACTION_UP:
+
+            case R.id.prev:
                 mParticleSystem.stopSystem();
+                mIndex = (0 == mIndex) ? PARTICLE_INFOS.length - 1 : mIndex - 1;
+                setupParticleSystem();
+                break;
+
+            case R.id.next:
+                mParticleSystem.stopSystem();
+                mIndex = (PARTICLE_INFOS.length - 1 == mIndex) ? 0 : mIndex + 1;
+                setupParticleSystem();
                 break;
         }
-        return true;
     }
 }

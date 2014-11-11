@@ -15,9 +15,8 @@ package com.badpx.particleandroid;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 
 /**
  * Created with IntelliJ IDEA.
@@ -26,19 +25,24 @@ import android.os.Build;
  */
 public class DrawableParticle extends Particle {
     protected Drawable mDrawable;
+    protected PorterDuff.Mode mMode = PorterDuff.Mode.CLEAR;
 
     public DrawableParticle(Drawable drawable) {
         mDrawable = drawable;
     }
 
+    public void setColorFilterMode(PorterDuff.Mode mode) {
+        mMode = mode;
+    }
+
     @Override
     public void draw(Canvas canvas) {
         if (null != mDrawable) {
-            if (mDrawable instanceof ColorDrawable &&
-                    Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-                ((ColorDrawable)mDrawable).setColor(color);
+            if (PorterDuff.Mode.CLEAR != mMode) {
+                mDrawable.setColorFilter(color, mMode);
+            } else {
+                mDrawable.setAlpha(Color.alpha(color));
             }
-            mDrawable.setAlpha(Color.alpha(color));
 
             int pivotX = (mDrawable.getBounds().width() >> 1);
             int pivotY = (mDrawable.getBounds().height() >> 1);
@@ -46,8 +50,12 @@ public class DrawableParticle extends Particle {
             canvas.save();
 
             canvas.translate(-pivotX, -pivotY);
-            canvas.scale(size, size, pivotX, pivotY);
-            canvas.rotate(rotation, pivotX, pivotY);
+            if (1.0f != size) {
+                canvas.scale(size, size, pivotX, pivotY);
+            }
+            if (0 != rotation) {
+                canvas.rotate(rotation, pivotX, pivotY);
+            }
             mDrawable.draw(canvas);
 
             canvas.restore();
