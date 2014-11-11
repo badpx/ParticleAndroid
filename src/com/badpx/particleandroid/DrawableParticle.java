@@ -25,20 +25,23 @@ import android.graphics.drawable.Drawable;
  */
 public class DrawableParticle extends Particle {
     protected Drawable mDrawable;
-    protected PorterDuff.Mode mMode = PorterDuff.Mode.CLEAR;
+    protected PorterDuff.Mode mMode = null;
 
     public DrawableParticle(Drawable drawable) {
         mDrawable = drawable;
     }
 
     public void setColorFilterMode(PorterDuff.Mode mode) {
+        if (null == mode) {
+            mDrawable.clearColorFilter();
+        }
         mMode = mode;
     }
 
     @Override
     public void draw(Canvas canvas) {
         if (null != mDrawable) {
-            if (PorterDuff.Mode.CLEAR != mMode) {
+            if (null != mMode) {
                 mDrawable.setColorFilter(color, mMode);
             } else {
                 mDrawable.setAlpha(Color.alpha(color));

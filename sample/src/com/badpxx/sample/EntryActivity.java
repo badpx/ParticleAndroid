@@ -48,9 +48,9 @@ public class EntryActivity extends Activity implements View.OnTouchListener,
     }
 
     private static final ParticleInfo[] PARTICLE_INFOS = {
-            new ParticleInfo(ParticleFire.class, R.drawable.halo, PorterDuff.Mode.CLEAR),
+            new ParticleInfo(ParticleFire.class, R.drawable.halo, null),
             new ParticleInfo(ParticleExplosion.class, R.drawable.fire, PorterDuff.Mode.SRC_IN),
-            new ParticleInfo(ParticleRain.class, 0, PorterDuff.Mode.CLEAR),
+            new ParticleInfo(ParticleRain.class, 0, null),
             new ParticleInfo(ParticleSpin.class, R.drawable.stars, PorterDuff.Mode.SRC_IN),
     };
 
