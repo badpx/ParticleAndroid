@@ -30,6 +30,7 @@ import java.util.Random;
  * Date: 14/11/6
  */
 public class ParticleSystem implements Runnable {
+
     public enum PositionType {
         POSITION_FREE,
         POSITION_GROUP,
@@ -70,6 +71,7 @@ public class ParticleSystem implements Runnable {
     protected long mLastTimestamp;
     protected ModeA modeA;
     protected ModeB modeB;
+    private boolean mIsPaused;
 
     //! Array of particles
     protected Particle[] mParticles;
@@ -87,7 +89,7 @@ public class ParticleSystem implements Runnable {
     protected int mInterval = 20;
     protected Handler mHandler;
     /** Is the emitter active */
-    boolean mIsActive = true;
+    boolean mIsActive = false;
     protected WeakReference<UpdateCallback> mCallbackRef;
 
     protected ParticleFactory mParticleFactory = new ParticleFactory() {
@@ -180,12 +182,22 @@ public class ParticleSystem implements Runnable {
         mEmitterMode = EmitterMode.MODE_GRAVITY;
 
         mHandler = new Handler();
-        mHandler.post(this);
+        start();
     }
 
-    public void tearDown() {
-        stopSystem();
+    // Stop the particle system right now and kill living particles.
+    public void shutdown() {
+        resetSystem();
         mHandler.removeCallbacks(this);
+        stopSystem();
+    }
+
+    // Restart the particle system.
+    public void start() {
+        if (!mIsActive) {
+            mHandler.post(this);
+            startSystem();
+        }
     }
 
     public void setParticleFactory(ParticleFactory factory) {
@@ -647,6 +659,7 @@ public class ParticleSystem implements Runnable {
 
     }
 
+    // Start a died system.
     public void startSystem() {
         mIsActive = true;
         mElapsed = 0;
@@ -659,7 +672,20 @@ public class ParticleSystem implements Runnable {
         mEmitCounter = 0;
     }
 
-    //! Kill all living particles.
+    public void pauseSystem() {
+        mHandler.removeCallbacks(this);
+        mIsPaused = true;
+    }
+
+    public void resumeSystem() {
+        if (mIsPaused) {
+            mLastTimestamp = SystemClock.uptimeMillis();
+            mHandler.post(this);
+            mIsPaused = false;
+        }
+    }
+
+    //! Kill all living particles and restart.
     public void resetSystem() {
         mIsActive = true;
         mElapsed = 0;

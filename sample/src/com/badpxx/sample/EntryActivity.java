@@ -80,6 +80,13 @@ public class EntryActivity extends Activity implements View.OnTouchListener,
         setupParticleSystem();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ParticleSystemView particleView = (ParticleSystemView) findViewById(R.id.ps);
+        particleView.clearParticleSystems();
+    }
+
     private void setupParticleSystem() {
         ParticleSystemView particleView = (ParticleSystemView) findViewById(R.id.ps);
 

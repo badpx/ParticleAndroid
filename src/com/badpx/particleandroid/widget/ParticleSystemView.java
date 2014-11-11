@@ -57,10 +57,17 @@ public class ParticleSystemView extends View {
     }
 
     @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+
+        restartParticleSystems();
+    }
+
+    @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
 
-        clearParticleSystems();
+        shutdownParticleSystems();
     }
 
     public void addParticleSystem(ParticleSystem particleSystem) {
@@ -74,16 +81,28 @@ public class ParticleSystemView extends View {
     public void removeParticleSystem(ParticleSystem particleSystem) {
         if (null != particleSystem) {
             if (mParticleSystems.remove(particleSystem)) {
-                particleSystem.tearDown();
+                particleSystem.setUpdateCallback(null);
             }
         }
     }
 
     public void clearParticleSystems() {
         for (ParticleSystem particleSystem : mParticleSystems) {
-            particleSystem.tearDown();
+            particleSystem.setUpdateCallback(null);
         }
         mParticleSystems.clear();
+    }
+
+    void shutdownParticleSystems() {
+        for (ParticleSystem particleSystem : mParticleSystems) {
+            particleSystem.shutdown();
+        }
+    }
+
+    void restartParticleSystems() {
+        for (ParticleSystem particleSystem : mParticleSystems) {
+            particleSystem.start();
+        }
     }
 
     @Override
