@@ -30,6 +30,10 @@ public class Colour {
         this.b = b;
     }
 
+    public boolean isEmpty() {
+        return 0 == a && 0 == r && 0 == g && 0 == b;
+    }
+
     public void copy(Colour colour) {
         a = colour.a;
         r = colour.r;

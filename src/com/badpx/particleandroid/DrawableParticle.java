@@ -14,9 +14,10 @@
 package com.badpx.particleandroid;
 
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
+import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
+
+import java.lang.reflect.Method;
 
 /**
  * Created with IntelliJ IDEA.
@@ -25,40 +26,45 @@ import android.graphics.drawable.Drawable;
  */
 public class DrawableParticle extends Particle {
     protected Drawable mDrawable;
-    protected PorterDuff.Mode mMode = null;
+    protected Paint mPaint;
 
-    public DrawableParticle(Drawable drawable) {
+    public DrawableParticle(ParticleSystem particleSystem, Drawable drawable) {
+        super(particleSystem);
         mDrawable = drawable;
-    }
-
-    public void setColorFilterMode(PorterDuff.Mode mode) {
-        if (null == mode) {
-            mDrawable.clearColorFilter();
+        if (null != mDrawable) {
+            Class clazz = mDrawable.getClass();
+            try {
+                Method m = clazz.getMethod("getPaint");
+                mPaint = (Paint) m.invoke(mDrawable);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
-        mMode = mode;
     }
 
     @Override
     public void draw(Canvas canvas) {
         if (null != mDrawable) {
-            if (null != mMode) {
-                mDrawable.setColorFilter(color, mMode);
+            if (null != parent.mColorFilterMode) {
+                if (!deltaColor.isEmpty()) {
+                    mDrawable.setColorFilter(color, parent.mColorFilterMode);
+                }
             } else {
-                mDrawable.setAlpha(Color.alpha(color));
+                mDrawable.clearColorFilter();
             }
 
-            mDrawable.setBounds(0, 0, (int)size, (int)size);
-            float pivotX = (size / 2);
-            float pivotY = pivotX;
+            if (null != mPaint && mPaint.getXfermode() != parent.mXfermode) {
+                mPaint.setXfermode(parent.mXfermode);
+            }
+
+            mDrawable.setBounds(0, 0, (int) size, (int) size);
+            float pivot = (size / 2);
 
             canvas.save();
 
-            canvas.translate(-pivotX, -pivotY);
-/*            if (1.0f != size) {
-                canvas.scale(size, size, pivotX, pivotY);
-            }*/
+            canvas.translate(-pivot, -pivot);
             if (0 != rotation) {
-                canvas.rotate(rotation, pivotX, pivotY);
+                canvas.rotate(rotation, pivot, pivot);
             }
             mDrawable.draw(canvas);
 

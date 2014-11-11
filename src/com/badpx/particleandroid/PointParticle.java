@@ -13,8 +13,7 @@
  */
 package com.badpx.particleandroid;
 
-import android.graphics.Canvas;
-import android.graphics.Paint;
+import android.graphics.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -24,9 +23,22 @@ import android.graphics.Paint;
 public class PointParticle extends Particle {
     private Paint mPaint = new Paint();
 
+    public PointParticle(ParticleSystem particleSystem) {
+        super(particleSystem);
+    }
+
     @Override
     public void draw(Canvas canvas) {
-        mPaint.setColor(color);
+        if (null != parent.mColorFilterMode) {
+            mPaint.setColorFilter(
+                    new PorterDuffColorFilter(color, parent.mColorFilterMode));
+        } else {
+            mPaint.setColor(color);
+        }
+
+        if (mPaint.getXfermode() != parent.mXfermode) {
+            mPaint.setXfermode(parent.mXfermode);
+        }
         canvas.drawCircle(0, 0, size / 2, mPaint);
     }
 }

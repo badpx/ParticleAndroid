@@ -13,8 +13,7 @@
  */
 package com.badpx.particleandroid;
 
-import android.graphics.Canvas;
-import android.graphics.Color;
+import android.graphics.*;
 import android.os.Handler;
 import android.os.SystemClock;
 import com.badpx.particleandroid.utils.Colour;
@@ -91,11 +90,14 @@ public class ParticleSystem implements Runnable {
     /** Is the emitter active */
     boolean mIsActive = false;
     protected WeakReference<UpdateCallback> mCallbackRef;
+    protected PorterDuff.Mode mColorFilterMode = PorterDuff.Mode.SRC_IN;
+    protected PorterDuff.Mode mBlendMode;
+    protected PorterDuffXfermode mXfermode;
 
     protected ParticleFactory mParticleFactory = new ParticleFactory() {
         @Override
         public Particle create(ParticleSystem particleSystem) {
-            return new PointParticle();
+            return new PointParticle(particleSystem);
         }
     };
 
@@ -545,6 +547,35 @@ public class ParticleSystem implements Runnable {
         mEmitterMode = var;
     }
 
+    public void setColorFilterMode(PorterDuff.Mode filterMode) {
+        if (filterMode != mColorFilterMode) {
+            mColorFilterMode = filterMode;
+        }
+    }
+
+    public PorterDuff.Mode getColorFilterMode() {
+        return mColorFilterMode;
+    }
+
+    public void setBlendMode(PorterDuff.Mode mode) {
+        if (mode != mBlendMode) {
+            mBlendMode = mode;
+            if (null != mode) {
+                mXfermode = new PorterDuffXfermode(mode);
+            } else {
+                mXfermode = null;
+            }
+        }
+    }
+
+    public PorterDuff.Mode getBlendMode() {
+        return mBlendMode;
+    }
+
+    public Xfermode getBlendXfermode() {
+        return mXfermode;
+    }
+
     //! Add a particle to the emitter
     protected boolean addParticle() {
         if (isFull()) {
@@ -594,7 +625,7 @@ public class ParticleSystem implements Runnable {
         g = (int)((Color.green(end) - Color.green(start)) / particle.timeToLive);
         b = (int)((Color.blue(end) - Color.blue(start)) / particle.timeToLive);
         a = (int)((Color.alpha(end) - Color.alpha(start)) / particle.timeToLive);
-        particle.deltaColour = new Colour(a, r, g, b);
+        particle.deltaColor = new Colour(a, r, g, b);
 
         // size
         float startS = mStartSize + mStartSizeVar * randomMinus1To1();
@@ -782,10 +813,10 @@ public class ParticleSystem implements Runnable {
                     }
 
                     // color
-                    int r = Color.red(p.color) + (int) (p.deltaColour.r * dt);
-                    int g = Color.green(p.color) + (int) (p.deltaColour.g * dt);
-                    int b = Color.blue(p.color) + (int) (p.deltaColour.b * dt);
-                    int a = Color.alpha(p.color) + (int) (p.deltaColour.a * dt);
+                    int r = Color.red(p.color) + (int) (p.deltaColor.r * dt);
+                    int g = Color.green(p.color) + (int) (p.deltaColor.g * dt);
+                    int b = Color.blue(p.color) + (int) (p.deltaColor.b * dt);
+                    int a = Color.alpha(p.color) + (int) (p.deltaColor.a * dt);
                     p.color = Color.argb(a, r, g, b);
 
                     // size

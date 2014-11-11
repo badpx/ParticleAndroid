@@ -37,13 +37,13 @@ public class EntryActivity extends Activity implements View.OnTouchListener,
     static class ParticleInfo {
         public Class clazz;
         public int particleRes;
-        public PorterDuff.Mode blendMode;
+        public PorterDuff.Mode colorFilter;
         public ParticleSystem particleSystem;
 
         public ParticleInfo(Class sys, int res, PorterDuff.Mode mode) {
             clazz = sys;
             particleRes = res;
-            blendMode = mode;
+            colorFilter = mode;
         }
     }
 
@@ -117,12 +117,13 @@ public class EntryActivity extends Activity implements View.OnTouchListener,
         if (0 != resId) {
             final Drawable drawableCommon =
                     getResources().getDrawable(PARTICLE_INFOS[mIndex].particleRes);
+            mParticleSystem.setColorFilterMode(PARTICLE_INFOS[mIndex].colorFilter);
+            mParticleSystem.setBlendMode(PorterDuff.Mode.ADD);
             mParticleSystem.setParticleFactory(new ParticleSystem.ParticleFactory() {
                 @Override
                 public Particle create(ParticleSystem particleSystem) {
                     Drawable drawable = drawableCommon.getConstantState().newDrawable();
-                    DrawableParticle particle = new DrawableParticle(drawable);
-                    particle.setColorFilterMode(PARTICLE_INFOS[mIndex].blendMode);
+                    DrawableParticle particle = new DrawableParticle(particleSystem, drawable);
                     return particle;
                 }
             });

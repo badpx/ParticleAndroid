@@ -23,12 +23,13 @@ import com.badpx.particleandroid.utils.Point;
  * Date: 14/11/6
  */
 public abstract class Particle {
+    protected ParticleSystem parent;
 
     protected Point     pos;
     protected Point     startPos;
 
     protected int    color;
-    protected Colour deltaColour;
+    protected Colour deltaColor;
 
     protected float        size;
     protected float        deltaSize;
@@ -69,7 +70,8 @@ public abstract class Particle {
         }
     }
 
-    public Particle() {
+    public Particle(ParticleSystem particleSystem) {
+        parent = particleSystem;
         pos = new Point();
         modeA = new ModeA();
         modeB = new ModeB();
@@ -80,7 +82,7 @@ public abstract class Particle {
         startPos.set(ohs.startPos);
 
         color = ohs.color;
-        deltaColour.copy(ohs.deltaColour);
+        deltaColor.copy(ohs.deltaColor);
 
         size = ohs.size;
         deltaSize = ohs.deltaSize;
