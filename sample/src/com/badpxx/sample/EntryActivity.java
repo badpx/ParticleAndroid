@@ -26,7 +26,7 @@ import com.badpx.particleandroid.Particle;
 import com.badpx.particleandroid.ParticleSystem;
 import com.badpx.particleandroid.preset.ParticleExplosion;
 import com.badpx.particleandroid.preset.ParticleFire;
-import com.badpx.particleandroid.preset.ParticleRain;
+import com.badpx.particleandroid.preset.ParticleSnow;
 import com.badpx.particleandroid.preset.ParticleSpin;
 import com.badpx.particleandroid.widget.ParticleSystemView;
 
@@ -50,7 +50,7 @@ public class EntryActivity extends Activity implements View.OnTouchListener,
     private static final ParticleInfo[] PARTICLE_INFOS = {
             new ParticleInfo(ParticleFire.class, R.drawable.halo, null),
             new ParticleInfo(ParticleExplosion.class, R.drawable.fire, PorterDuff.Mode.SRC_IN),
-            new ParticleInfo(ParticleRain.class, 0, null),
+            new ParticleInfo(ParticleSnow.class, R.drawable.snow, null),
             new ParticleInfo(ParticleSpin.class, R.drawable.stars, PorterDuff.Mode.SRC_IN),
     };
 

@@ -59,9 +59,9 @@ public class ParticleSpin extends ParticleSystem {
 
         // spin of particles
         setStartSpin(0);
-        setStartSpinVar(0);
-        setEndSpin(0);
-        setEndSpinVar(0);
+        setStartSpinVar(60);
+        setEndSpin(360);
+        setEndSpinVar(60);
 
         // color of particles
         setStartColor(Colour.argb(1.0f, 0.5f, 0.5f, 0.5f));

@@ -22,18 +22,18 @@ import com.badpx.particleandroid.utils.Point;
  * User: kanedong
  * Date: 14/11/6
  */
-public class ParticleRain extends ParticleSystem {
+public class ParticleSnow extends ParticleSystem {
     private int mHorizontal;
 
-    public ParticleRain() {
+    public ParticleSnow() {
         this(240);
     }
 
-    public ParticleRain(int horizontalRang) {
+    public ParticleSnow(int horizontalRang) {
         this(horizontalRang, 100);
     }
 
-    public ParticleRain(int horizontalRang, int numOfParticles) {
+    public ParticleSnow(int horizontalRang, int numOfParticles) {
         mHorizontal = horizontalRang;
         setup(numOfParticles);
     }
@@ -58,7 +58,7 @@ public class ParticleRain extends ParticleSystem {
         setTangentialAccelVar(1);
 
         // Gravity Mode: speed of particles
-        setSpeed(130);
+        setSpeed(110);
         setSpeedVar(30);
 
         // angle
@@ -71,19 +71,22 @@ public class ParticleRain extends ParticleSystem {
         mLife = 4.5f;
         mLifeVar = 0;
 
+        mStartSpinVar = 20;
+        mEndSpin = 180;
+        mEndSpinVar = 60;
+
         // size, in pixels
-        mStartSize = 4.0f;
-        mStartSizeVar = 2.0f;
+        mStartSize = 20.0f;
+        mStartSizeVar = 5.0f;
         mEndSize = END_SIZE_EQUAL_TO_START_SIZE;
 
         // emits per second
-//        mEmissionRate = 20;
         mEmissionRate = mTotalParticles / mLife;
 
         // color of particles
-        mStartColor = Colour.argb(1.0f, 0.7f, 0.8f, 1.0f);
+        mStartColor = Colour.argb(1.0f, 1.0f, 1.0f, 1.0f);
         mStartColorVar = 0;
-        mEndColor = Colour.argb(0.5f, 0.7f, 0.8f, 1.0f);
+        mEndColor = Colour.argb(0.5f, 0.8f, 0.8f, 0.8f);
         mEndColor = 0;
 
     }

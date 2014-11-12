@@ -45,22 +45,25 @@ public class DrawableParticle extends Particle {
 
     @Override
     public void draw(Canvas canvas) {
-        if (null != mDrawable) {
+        Drawable drawable = mDrawable;
+        if (null != drawable) {
             if (null != parent.mColorFilterMode) {
                 if (!deltaColor.isEmpty()) {
-                    mDrawable.setColorFilter(color, parent.mColorFilterMode);
+                    drawable.setColorFilter(color, parent.mColorFilterMode);
                 }
             } else {
-                mDrawable.clearColorFilter();
+                drawable.clearColorFilter();
             }
-            mDrawable.setAlpha(Color.alpha(color));
+            drawable.setAlpha(Color.alpha(color));
 
-            if (null != mPaint && mPaint.getXfermode() != parent.mXfermode) {
-                mPaint.setXfermode(parent.mXfermode);
+            Paint paint = mPaint;
+            if (null != paint && paint.getXfermode() != parent.mXfermode) {
+                paint.setXfermode(parent.mXfermode);
             }
 
-            mDrawable.setBounds(0, 0, (int) size, (int) size);
-            float pivot = (size / 2);
+            int s = (int)size;
+            drawable.setBounds(0, 0, s, s);
+            float pivot = (s >> 1);
 
             canvas.save();
 
@@ -68,7 +71,7 @@ public class DrawableParticle extends Particle {
             if (0 != rotation) {
                 canvas.rotate(rotation, pivot, pivot);
             }
-            mDrawable.draw(canvas);
+            drawable.draw(canvas);
 
             canvas.restore();
         }
