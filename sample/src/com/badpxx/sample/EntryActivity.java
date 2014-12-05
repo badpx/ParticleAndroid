@@ -22,6 +22,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import com.badpx.particleandroid.DrawableParticle;
+import com.badpx.particleandroid.PListParticleSystemHelper;
 import com.badpx.particleandroid.Particle;
 import com.badpx.particleandroid.ParticleSystem;
 import com.badpx.particleandroid.preset.ParticleExplosion;
@@ -97,7 +98,9 @@ public class EntryActivity extends Activity implements View.OnTouchListener,
             mParticleSystem.stopSystem();
         }
 
-        mParticleSystem = PARTICLE_INFOS[mIndex].particleSystem;
+//        mParticleSystem = PARTICLE_INFOS[mIndex].particleSystem;
+        mParticleSystem =
+                PListParticleSystemHelper.create(getResources(), "lava_flow.plist");
         if (null == mParticleSystem) {
             try {
                 mParticleSystem = PARTICLE_INFOS[mIndex].particleSystem =
