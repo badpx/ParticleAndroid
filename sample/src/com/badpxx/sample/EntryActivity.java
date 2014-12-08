@@ -14,6 +14,7 @@
 package com.badpxx.sample;
 
 import android.app.Activity;
+import android.content.res.Resources;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -25,34 +26,97 @@ import com.badpx.particleandroid.DrawableParticle;
 import com.badpx.particleandroid.PListParticleSystemHelper;
 import com.badpx.particleandroid.Particle;
 import com.badpx.particleandroid.ParticleSystem;
-import com.badpx.particleandroid.preset.ParticleExplosion;
-import com.badpx.particleandroid.preset.ParticleFire;
-import com.badpx.particleandroid.preset.ParticleSnow;
-import com.badpx.particleandroid.preset.ParticleSpin;
+import com.badpxx.sample.preset.ParticleExplosion;
+import com.badpxx.sample.preset.ParticleFire;
+import com.badpxx.sample.preset.ParticleSnow;
+import com.badpxx.sample.preset.ParticleSpin;
 import com.badpx.particleandroid.widget.ParticleSystemView;
 
 
 public class EntryActivity extends Activity implements View.OnTouchListener,
         View.OnClickListener {
 
-    static class ParticleInfo {
-        public Class clazz;
-        public int particleRes;
-        public PorterDuff.Mode colorFilter;
-        public ParticleSystem particleSystem;
+    interface ParticleSystemCreator {
+        public ParticleSystem create(Resources resources);
+    }
 
-        public ParticleInfo(Class sys, int res, PorterDuff.Mode mode) {
+    static class PresetCreator implements ParticleSystemCreator {
+        Class clazz;
+        int particleRes;
+        PorterDuff.Mode colorFilter;
+        ParticleSystem particleSystem;
+
+        public PresetCreator(Class sys, int res, PorterDuff.Mode mode) {
             clazz = sys;
             particleRes = res;
             colorFilter = mode;
         }
+
+        @Override
+        public String toString() {
+            return getClass().getSimpleName();
+        }
+
+        public ParticleSystem create(Resources resources) {
+            if (null == particleSystem) {
+                try {
+                    particleSystem =
+                            (ParticleSystem) clazz.newInstance();
+                    final Drawable drawableCommon = resources.getDrawable(particleRes);
+                    particleSystem.setColorFilterMode(colorFilter);
+                    particleSystem.setParticleFactory(new ParticleSystem.ParticleFactory() {
+                        @Override
+                        public Particle create(ParticleSystem particleSystem) {
+                            return new DrawableParticle(particleSystem, drawableCommon);
+                        }
+                    });
+                } catch (InstantiationException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+            }
+            return particleSystem;
+        }
     }
 
-    private static final ParticleInfo[] PARTICLE_INFOS = {
-            new ParticleInfo(ParticleFire.class, R.drawable.halo, null),
-            new ParticleInfo(ParticleExplosion.class, R.drawable.fire, PorterDuff.Mode.SRC_IN),
-            new ParticleInfo(ParticleSnow.class, R.drawable.snow, null),
-            new ParticleInfo(ParticleSpin.class, R.drawable.stars, PorterDuff.Mode.SRC_IN),
+    static class PListCreator implements ParticleSystemCreator {
+        final String plistPath;
+        ParticleSystem particleSystem;
+
+        public PListCreator(String plistPath) {
+            this.plistPath = plistPath;
+        }
+
+        @Override
+        public String toString() {
+            return plistPath;
+        }
+
+        @Override
+        public ParticleSystem create(Resources resources) {
+            if (null == particleSystem) {
+                particleSystem = PListParticleSystemHelper.create(resources, plistPath);
+            }
+            return particleSystem;
+        }
+    }
+
+    private static final ParticleSystemCreator[] PARTICLE_INFOS = {
+            new PresetCreator(ParticleFire.class, R.drawable.halo, null),
+            new PresetCreator(ParticleExplosion.class, R.drawable.fire, PorterDuff.Mode.SRC_IN),
+            new PresetCreator(ParticleSnow.class, R.drawable.snow, null),
+            new PresetCreator(ParticleSpin.class, R.drawable.stars, PorterDuff.Mode.SRC_IN),
+            new PListCreator("BurstPipe.plist"),
+            new PListCreator("Spiral.plist"),
+            new PListCreator("Phoenix.plist"),
+            new PListCreator("lava_flow.plist"),
+            new PListCreator("Galaxy.plist"),
+            new PListCreator("Upsidedown.plist"),
+            new PListCreator("debian.plist"),
+            new PListCreator("Flower.plist"),
+            new PListCreator("BoilingFoam.plist"),
+            new PListCreator("SpookyPeas.plist"),
     };
 
 
@@ -98,39 +162,16 @@ public class EntryActivity extends Activity implements View.OnTouchListener,
             mParticleSystem.stopSystem();
         }
 
-//        mParticleSystem = PARTICLE_INFOS[mIndex].particleSystem;
-        mParticleSystem =
-                PListParticleSystemHelper.create(getResources(), "lava_flow.plist");
-        if (null == mParticleSystem) {
-            try {
-                mParticleSystem = PARTICLE_INFOS[mIndex].particleSystem =
-                        (ParticleSystem)PARTICLE_INFOS[mIndex].clazz.newInstance();
-            } catch (Exception e) {
-                e.printStackTrace();
-                return ;
-            }
-        } else {
+        mParticleSystem = PARTICLE_INFOS[mIndex].create(getResources());
+        if (null != mParticleSystem) {
             mParticleSystem.resetSystem();
-        }
-        mTitle.setText(mParticleSystem.getClass().getSimpleName());
+            mTitle.setText(PARTICLE_INFOS[mIndex].toString());
 
-        mParticleSystem.setPosition(posX, posY);
-        mParticleSystem.setInterval(1000 / 60);
-        int resId = PARTICLE_INFOS[mIndex].particleRes;
-        if (0 != resId) {
-            final Drawable drawableCommon =
-                    getResources().getDrawable(PARTICLE_INFOS[mIndex].particleRes);
-            mParticleSystem.setColorFilterMode(PARTICLE_INFOS[mIndex].colorFilter);
-            mParticleSystem.setParticleFactory(new ParticleSystem.ParticleFactory() {
-                @Override
-                public Particle create(ParticleSystem particleSystem) {
-                    Drawable drawable = drawableCommon.getConstantState().newDrawable();
-                    return new DrawableParticle(particleSystem, drawable);
-                }
-            });
+            mParticleSystem.setPosition(posX, posY);
+            mParticleSystem.setInterval(1000 / 60);
+            particleView.addParticleSystem(mParticleSystem);
+            particleView.setOnTouchListener(this);
         }
-        particleView.addParticleSystem(mParticleSystem);
-        particleView.setOnTouchListener(this);
     }
 
     @Override

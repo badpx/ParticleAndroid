@@ -11,8 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package com.badpx.particleandroid.preset;
+package com.badpxx.sample.preset;
 
 import com.badpx.particleandroid.ParticleSystem;
 import com.badpx.particleandroid.utils.Colour;
@@ -21,15 +20,16 @@ import com.badpx.particleandroid.utils.Point;
 /**
  * Created with IntelliJ IDEA.
  * User: kanedong
- * Date: 14/11/10
+ * Date: 14/11/6
  */
-public class ParticleExplosion extends ParticleSystem {
-    public ParticleExplosion() {
-        super();
+public class ParticleFire extends ParticleSystem {
+
+    public ParticleFire() {
+        super(77);
     }
 
-    public ParticleExplosion(int numOfParticles) {
-        super(numOfParticles);
+    public ParticleFire(int num) {
+        super(num);
     }
 
     @Override
@@ -37,46 +37,44 @@ public class ParticleExplosion extends ParticleSystem {
         super.setup(numberOfParticles);
 
         // duration
-        mDuration = -1f;
+        mDuration = -1;
 
-        mEmitterMode = EmitterMode.MODE_GRAVITY;
+        // Gravity Mode
+        this.mEmitterMode = EmitterMode.MODE_GRAVITY;
+        this.mPositionType = PositionType.POSITION_FREE;
 
         // Gravity Mode: gravity
-        modeA.gravity = new Point(0, 0);
+        this.modeA.gravity = new Point();
+
+        // Gravity Mode: radial acceleration
+        this.modeA.radialAccel = 0;
+        this.modeA.radialAccelVar = 0;
 
         // Gravity Mode: speed of particles
-        modeA.speed = 70;
-        modeA.speedVar = 40;
+        this.modeA.speed = 225;
+        this.modeA.speedVar = 30;
 
-        // Gravity Mode: radial
-        modeA.radialAccel = 0;
-        modeA.radialAccelVar = 0;
-
-        // Gravity Mode: tangential
-        modeA.tangentialAccel = 0;
-        modeA.tangentialAccelVar = 0;
-
-        // angle
+        // starting angle
         mAngle = 90;
-        mAngleVar = 360;
+        mAngleVar = 10;
 
-        mPosVar = new Point();
+        // emitter position variance
+        this.mPosVar = new Point(7, 7);
+//        this.mSourcePosition = new Point(7, 7);
 
         // life of particles
-        mLife = 2.0f;
-        mLifeVar = 1;
+        mLife = 1;
+        mLifeVar = 0;
 
         // size, in pixels
-        mStartSize = 15.0f;
-        mStartSizeVar = 10.0f;
-        mEndSize = END_SIZE_EQUAL_TO_START_SIZE;
+        mStartSize = 64.0f;
+        mStartSizeVar = 5.0f;
+        mEndSize = 0;
 
-        // emits per second
+        // emits per frame
         mEmissionRate = mTotalParticles / mLife;
 
         // color of particles
-        mStartColor = Colour.argb(1.0f, 0.7f, 0.1f, 0.2f);
-        mStartColorVar = Colour.argb(0f, 0.5f, 0.5f, 0.5f);
-        mEndColorVar = Colour.argb(0f, 0.5f, 0.5f, 0.5f);
+        mStartColor = Colour.argb(1.0f, 0.76f, 0.25f, 0.12f);
     }
 }

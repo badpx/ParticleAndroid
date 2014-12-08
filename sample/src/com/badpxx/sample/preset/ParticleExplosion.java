@@ -11,7 +11,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.badpx.particleandroid.preset;
+
+package com.badpxx.sample.preset;
 
 import com.badpx.particleandroid.ParticleSystem;
 import com.badpx.particleandroid.utils.Colour;
@@ -20,74 +21,62 @@ import com.badpx.particleandroid.utils.Point;
 /**
  * Created with IntelliJ IDEA.
  * User: kanedong
- * Date: 14/11/6
+ * Date: 14/11/10
  */
-public class ParticleSnow extends ParticleSystem {
-    private int mHorizontal;
-
-    public ParticleSnow() {
-        this(240);
+public class ParticleExplosion extends ParticleSystem {
+    public ParticleExplosion() {
+        super();
     }
 
-    public ParticleSnow(int horizontalRang) {
-        this(horizontalRang, 100);
-    }
-
-    public ParticleSnow(int horizontalRang, int numOfParticles) {
-        mHorizontal = horizontalRang;
-        setup(numOfParticles);
+    public ParticleExplosion(int numOfParticles) {
+        super(numOfParticles);
     }
 
     @Override
     protected void setup(int numberOfParticles) {
         super.setup(numberOfParticles);
-        // duration
-        mDuration = DURATION_INFINITY;
 
-        setEmitterMode(EmitterMode.MODE_GRAVITY);
+        // duration
+        mDuration = -1f;
+
+        mEmitterMode = EmitterMode.MODE_GRAVITY;
 
         // Gravity Mode: gravity
-        setGravity(new Point(10,-10));
-
-        // Gravity Mode: radial
-        setRadialAccel(0);
-        setRadialAccelVar(1);
-
-        // Gravity Mode: tangential
-        setTangentialAccel(0);
-        setTangentialAccelVar(1);
+        modeA.gravity = new Point(0, 0);
 
         // Gravity Mode: speed of particles
-        setSpeed(110);
-        setSpeedVar(30);
+        modeA.speed = 70;
+        modeA.speedVar = 40;
+
+        // Gravity Mode: radial
+        modeA.radialAccel = 0;
+        modeA.radialAccelVar = 0;
+
+        // Gravity Mode: tangential
+        modeA.tangentialAccel = 0;
+        modeA.tangentialAccelVar = 0;
 
         // angle
-        mAngle = -90;
-        mAngleVar = 5;
+        mAngle = 90;
+        mAngleVar = 360;
 
-        setPosVar(new Point(mHorizontal, 0));
+        mPosVar = new Point();
 
         // life of particles
-        mLife = 4.5f;
-        mLifeVar = 0;
-
-        mStartSpinVar = 20;
-        mEndSpin = 180;
-        mEndSpinVar = 60;
+        mLife = 2.0f;
+        mLifeVar = 1;
 
         // size, in pixels
-        mStartSize = 20.0f;
-        mStartSizeVar = 5.0f;
+        mStartSize = 15.0f;
+        mStartSizeVar = 10.0f;
         mEndSize = END_SIZE_EQUAL_TO_START_SIZE;
 
         // emits per second
         mEmissionRate = mTotalParticles / mLife;
 
         // color of particles
-        mStartColor = Colour.argb(1.0f, 1.0f, 1.0f, 1.0f);
-        mStartColorVar = 0;
-        mEndColor = Colour.argb(0.5f, 0.8f, 0.8f, 0.8f);
-        mEndColor = 0;
-
+        mStartColor = Colour.argb(1.0f, 0.7f, 0.1f, 0.2f);
+        mStartColorVar = Colour.argb(0f, 0.5f, 0.5f, 0.5f);
+        mEndColorVar = Colour.argb(0f, 0.5f, 0.5f, 0.5f);
     }
 }

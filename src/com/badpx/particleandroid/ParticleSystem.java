@@ -83,7 +83,7 @@ public class ParticleSystem implements Runnable {
     // Number of allocated particles
     int mAllocatedParticles;
     protected int mParticleCount;
-    protected PositionType mPositionType;
+    protected PositionType mPositionType = PositionType.POSITION_FREE;
     protected EmitterMode mEmitterMode;
     protected int mInterval = 20;
     protected Handler mHandler;

@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.badpx.particleandroid.preset;
+package com.badpxx.sample.preset;
 
 import com.badpx.particleandroid.ParticleSystem;
 import com.badpx.particleandroid.utils.Colour;
