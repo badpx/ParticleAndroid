@@ -26,7 +26,7 @@ public class ParticleSnow extends ParticleSystem {
     private int mHorizontal;
 
     public ParticleSnow() {
-        this(240);
+        this(256);
     }
 
     public ParticleSnow(int horizontalRang) {

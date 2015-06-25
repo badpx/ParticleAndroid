@@ -161,7 +161,7 @@ public class ParticleSystem implements Runnable {
     }
 
     public ParticleSystem() {
-        setup(100);
+        setup(256);
     }
 
     public ParticleSystem(int numberOfParticles) {

@@ -20,6 +20,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.SystemClock;
 import android.util.AttributeSet;
+import com.badpx.particleandroid.ParticleSystem;
 import com.badpx.particleandroid.widget.ParticleSystemView;
 
 /**
@@ -63,5 +64,11 @@ public final class ParticleFpsView extends ParticleSystemView {
         }
         ++mFrameCount;
         canvas.drawText(String.format("FPS: %d", mFps), mPosX, mPoxY, mPaint);
+
+        int particleTotal = 0;
+        for (ParticleSystem particleSystem : mParticleSystems) {
+            particleTotal += particleSystem.getParticleCount();
+        }
+        canvas.drawText(String.format("Particle Count: %d", particleTotal), mPosX, mPoxY + 50, mPaint);
     }
 }

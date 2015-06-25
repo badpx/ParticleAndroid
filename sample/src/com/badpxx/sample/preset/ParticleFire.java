@@ -25,7 +25,7 @@ import com.badpx.particleandroid.utils.Point;
 public class ParticleFire extends ParticleSystem {
 
     public ParticleFire() {
-        super(77);
+        super(256);
     }
 
     public ParticleFire(int num) {
@@ -67,7 +67,7 @@ public class ParticleFire extends ParticleSystem {
         mLifeVar = 0;
 
         // size, in pixels
-        mStartSize = 64.0f;
+        mStartSize = 96.0f;
         mStartSizeVar = 5.0f;
         mEndSize = 0;
 
