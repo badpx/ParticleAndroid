@@ -117,6 +117,11 @@ public class EntryActivity extends Activity implements View.OnTouchListener,
             new PListCreator("Flower.plist"),
             new PListCreator("BoilingFoam.plist"),
             new PListCreator("SpookyPeas.plist"),
+//            new PListCreator("Comet.plist"),
+//            new PListCreator("ExplodingRing.plist"),
+//            new PListCreator("lines.plist"),
+//            new PListCreator("SmallSun.plist"),
+//            new PListCreator("SpinningPeas.plist"),
     };
 
 

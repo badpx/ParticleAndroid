@@ -13,6 +13,11 @@
  */
 package com.badpx.particleandroid.utils;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.zip.GZIPInputStream;
+
 /**
  * Created with IntelliJ IDEA.
  * User: kanedong
@@ -37,5 +42,30 @@ public class Misc {
             max_inclusive = t;
         }
         return value < min_inclusive ? min_inclusive : value < max_inclusive? value : max_inclusive;
+    }
+
+    // Unzip gzip buffer
+    public static byte[] unzip(byte[] gzipBuffer) throws IOException {
+        if (null != gzipBuffer && gzipBuffer.length > 0) {
+            GZIPInputStream gzipInputStream;
+            gzipInputStream = new GZIPInputStream(
+                    new ByteArrayInputStream(gzipBuffer, 0, gzipBuffer.length));
+
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            byte[] buffer = new byte[1024];
+            while (true) {
+                int len = gzipInputStream.read(buffer);
+                if (-1 != len) {
+                    baos.write(buffer, 0, len);
+                } else {
+                    break;
+                }
+            }
+            gzipInputStream.close();
+            baos.close();
+
+            return baos.toByteArray();
+        }
+        return null;
     }
 }

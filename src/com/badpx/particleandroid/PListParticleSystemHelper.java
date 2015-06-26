@@ -1,11 +1,15 @@
 package com.badpx.particleandroid;
 
+import android.annotation.TargetApi;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
+import android.util.Base64;
 import com.badpx.particleandroid.utils.Colour;
+import com.badpx.particleandroid.utils.Misc;
 import com.badpx.particleandroid.utils.PListParser;
 import com.badpx.particleandroid.utils.Point;
 
@@ -28,6 +32,7 @@ public class PListParticleSystemHelper {
         return null;
     }
 
+    @TargetApi(Build.VERSION_CODES.FROYO)
     public static ParticleSystem create(Resources resources, InputStream plistStream) {
         if (null != plistStream) {
             PListParser parser = new PListParser(plistStream);
@@ -180,30 +185,67 @@ public class PListParticleSystemHelper {
                         g instanceof Float && b instanceof Float) {
                     particleSystem.setEndColorVar(Colour.argb((Float)a, (Float)r, (Float)g, (Float)b));
                 }
+
+                // emits per frame
+                particleSystem.mEmissionRate =
+                        particleSystem.mTotalParticles / particleSystem.mLife;
+
+                boolean isTextureSetup = false;
                 v = kv.get("textureFileName");
                 if (v instanceof String && null != resources) {
                     String fileName = (String)v;
                     try {
                         final Bitmap texture =
                                 BitmapFactory.decodeStream(resources.getAssets().open(fileName));
-                        particleSystem.setParticleFactory(new ParticleSystem.ParticleFactory() {
-                            private Drawable mCommonDrawable;
-                            @Override
-                            public Particle create(ParticleSystem particleSystem) {
-                                if (null == mCommonDrawable) {
-                                    mCommonDrawable = new BitmapDrawable(texture);
-                                }
+                        if (null != texture) {
+                            particleSystem.setParticleFactory(new ParticleSystem.ParticleFactory() {
+                                private Drawable mCommonDrawable;
+                                @Override
+                                public Particle create(ParticleSystem particleSystem) {
+                                    if (null == mCommonDrawable) {
+                                        mCommonDrawable = new BitmapDrawable(texture);
+                                    }
 //                                Drawable drawable = mCommonDrawable.getConstantState().newDrawable();
-                                return new DrawableParticle(particleSystem, mCommonDrawable);
-                            }
-                        });
+                                    return new DrawableParticle(particleSystem, mCommonDrawable);
+                                }
+                            });
+                            isTextureSetup = true;
+                        }
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                 }
-                // emits per frame
-                particleSystem.mEmissionRate =
-                        particleSystem.mTotalParticles / particleSystem.mLife;
+
+                if (!isTextureSetup) {
+                    v = kv.get("textureImageData");
+                    if (v instanceof String) {
+                        byte[] buffer = Base64.decode((String) v, Base64.DEFAULT);
+                        try {
+                            byte[] deflated = Misc.unzip(buffer);
+                            if (null != deflated) {
+                                final Bitmap texture =
+                                        BitmapFactory.decodeByteArray(deflated, 0, deflated.length);
+                                if (null != texture) {
+                                    particleSystem.setParticleFactory(new ParticleSystem.ParticleFactory() {
+                                        private Drawable mCommonDrawable;
+
+                                        @Override
+                                        public Particle create(ParticleSystem particleSystem) {
+                                            if (null == mCommonDrawable) {
+                                                mCommonDrawable = new BitmapDrawable(texture);
+                                            }
+                                            Drawable drawable = mCommonDrawable.getConstantState().newDrawable();
+                                            return new DrawableParticle(particleSystem, drawable);
+                                        }
+                                    });
+                                }
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+
                 return particleSystem;
             }
         }
