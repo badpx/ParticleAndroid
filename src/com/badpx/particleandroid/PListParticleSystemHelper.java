@@ -4,14 +4,12 @@ import android.annotation.TargetApi;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.Base64;
-import com.badpx.particleandroid.utils.Colour;
-import com.badpx.particleandroid.utils.Misc;
-import com.badpx.particleandroid.utils.PListParser;
-import com.badpx.particleandroid.utils.Point;
+import com.badpx.particleandroid.utils.*;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -123,7 +121,24 @@ public class PListParticleSystemHelper {
                 if (v instanceof Float) {
                     particleSystem.setLifeVar((Float) v);
                 }
+
+                int blendFuncSource = -1;
+                v = kv.get("blendFuncSource");
+                if (v instanceof Integer) {
+                    blendFuncSource = (Integer)v;
+                }
+                int blendFuncDest = -1;
                 v = kv.get("blendFuncDestination");
+                if (v instanceof Integer) {
+                    blendFuncDest = (Integer)v;
+                }
+                if (blendFuncSource > -1 && blendFuncDest > -1) {
+                    PorterDuff.Mode mode =
+                            BlendUtils.getPorterDuffModeByBlendFunc(blendFuncSource, blendFuncDest);
+                    particleSystem.setBlendMode(mode);
+//                    particleSystem.setColorFilterMode(mode);
+                }
+
                 v = kv.get("particleLifespan");
                 if (v instanceof Float) {
                     particleSystem.setLife((Float) v);
@@ -145,7 +160,6 @@ public class PListParticleSystemHelper {
                 if (v instanceof Float) {
                     particleSystem.setDuration((Float) v);
                 }
-                v = kv.get("blendFuncSource");
                 v = kv.get("startParticleSizeVariance");
                 if (v instanceof Float) {
                     particleSystem.setStartSizeVar((Float) v);
