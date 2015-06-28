@@ -52,8 +52,10 @@ public class BlendUtils {
         BLEND_MODE_TO_PORTER_DUFF.put(combineKey(GL_ONE_MINUS_DST_ALPHA, GL_SRC_ALPHA), PorterDuff.Mode.DST_ATOP);
         BLEND_MODE_TO_PORTER_DUFF.put(combineKey(GL_ONE_MINUS_DST_ALPHA, GL_ONE_MINUS_SRC_ALPHA), PorterDuff.Mode.XOR);
         BLEND_MODE_TO_PORTER_DUFF.put(combineKey(GL_ONE, GL_ONE), PorterDuff.Mode.ADD);
-        BLEND_MODE_TO_PORTER_DUFF.put(combineKey(GL_ZERO, GL_SRC_COLOR), PorterDuff.Mode.MULTIPLY);
+        BLEND_MODE_TO_PORTER_DUFF.put(combineKey(GL_DST_COLOR, GL_SRC_COLOR), PorterDuff.Mode.MULTIPLY);
         BLEND_MODE_TO_PORTER_DUFF.put(combineKey(GL_ONE, GL_ONE_MINUS_SRC_COLOR), PorterDuff.Mode.SCREEN);
+        // Fake Additive mode:
+        BLEND_MODE_TO_PORTER_DUFF.put(combineKey(GL_SRC_ALPHA, GL_ONE), PorterDuff.Mode.ADD);
     }
 
     private static int combineKey(int sfactor, int dfactor) {

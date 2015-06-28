@@ -90,7 +90,7 @@ public class ParticleSystem implements Runnable {
     /** Is the emitter active */
     boolean mIsActive = false;
     protected WeakReference<UpdateCallback> mCallbackRef;
-    protected PorterDuff.Mode mColorFilterMode = PorterDuff.Mode.SRC_IN;
+    protected PorterDuff.Mode mColorFilterMode = PorterDuff.Mode.MULTIPLY;
     protected PorterDuff.Mode mBlendMode;
     protected PorterDuffXfermode mXfermode;
 
@@ -547,13 +547,13 @@ public class ParticleSystem implements Runnable {
         mEmitterMode = var;
     }
 
-    public void setColorFilterMode(PorterDuff.Mode filterMode) {
+    final void setColorFilterMode(PorterDuff.Mode filterMode) {
         if (filterMode != mColorFilterMode) {
             mColorFilterMode = filterMode;
         }
     }
 
-    public PorterDuff.Mode getColorFilterMode() {
+    public final PorterDuff.Mode getColorFilterMode() {
         return mColorFilterMode;
     }
 

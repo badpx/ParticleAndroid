@@ -43,13 +43,13 @@ public class EntryActivity extends Activity implements View.OnTouchListener,
     static class PresetCreator implements ParticleSystemCreator {
         Class clazz;
         int particleRes;
-        PorterDuff.Mode colorFilter;
         ParticleSystem particleSystem;
+        PorterDuff.Mode blendMode;
 
         public PresetCreator(Class sys, int res, PorterDuff.Mode mode) {
             clazz = sys;
             particleRes = res;
-            colorFilter = mode;
+            blendMode = mode;
         }
 
         @Override
@@ -63,7 +63,7 @@ public class EntryActivity extends Activity implements View.OnTouchListener,
                     particleSystem =
                             (ParticleSystem) clazz.newInstance();
                     final Drawable drawableCommon = resources.getDrawable(particleRes);
-                    particleSystem.setColorFilterMode(colorFilter);
+                    particleSystem.setBlendMode(blendMode);
                     particleSystem.setParticleFactory(new ParticleSystem.ParticleFactory() {
                         @Override
                         public Particle create(ParticleSystem particleSystem) {
@@ -103,20 +103,21 @@ public class EntryActivity extends Activity implements View.OnTouchListener,
     }
 
     private static final ParticleSystemCreator[] PARTICLE_INFOS = {
-            new PresetCreator(ParticleFire.class, R.drawable.halo, null),
-            new PresetCreator(ParticleExplosion.class, R.drawable.fire, PorterDuff.Mode.SRC_IN),
+            new PresetCreator(ParticleFire.class, R.drawable.fire, PorterDuff.Mode.ADD),
+            new PresetCreator(ParticleExplosion.class, R.drawable.fire, null),
             new PresetCreator(ParticleSnow.class, R.drawable.snow, null),
-            new PresetCreator(ParticleSpin.class, R.drawable.stars, PorterDuff.Mode.SRC_IN),
+            new PresetCreator(ParticleSpin.class, R.drawable.stars, null),
             new PListCreator("BurstPipe.plist"),
             new PListCreator("Spiral.plist"),
             new PListCreator("Phoenix.plist"),
             new PListCreator("lava_flow.plist"),
             new PListCreator("Galaxy.plist"),
-            new PListCreator("Upsidedown.plist"),
             new PListCreator("debian.plist"),
             new PListCreator("Flower.plist"),
             new PListCreator("BoilingFoam.plist"),
             new PListCreator("SpookyPeas.plist"),
+            new PListCreator("Upsidedown.plist"),
+            new PListCreator("volcano.plist"),
 //            new PListCreator("Comet.plist"),
 //            new PListCreator("ExplodingRing.plist"),
 //            new PListCreator("lines.plist"),

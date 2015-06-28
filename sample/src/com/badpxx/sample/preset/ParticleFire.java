@@ -25,7 +25,7 @@ import com.badpx.particleandroid.utils.Point;
 public class ParticleFire extends ParticleSystem {
 
     public ParticleFire() {
-        super(256);
+        super(200);
     }
 
     public ParticleFire(int num) {

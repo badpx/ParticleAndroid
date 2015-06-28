@@ -136,7 +136,6 @@ public class PListParticleSystemHelper {
                     PorterDuff.Mode mode =
                             BlendUtils.getPorterDuffModeByBlendFunc(blendFuncSource, blendFuncDest);
                     particleSystem.setBlendMode(mode);
-//                    particleSystem.setColorFilterMode(mode);
                 }
 
                 v = kv.get("particleLifespan");
@@ -219,8 +218,8 @@ public class PListParticleSystemHelper {
                                     if (null == mCommonDrawable) {
                                         mCommonDrawable = new BitmapDrawable(texture);
                                     }
-//                                Drawable drawable = mCommonDrawable.getConstantState().newDrawable();
-                                    return new DrawableParticle(particleSystem, mCommonDrawable);
+                                    Drawable drawable = mCommonDrawable.getConstantState().newDrawable();
+                                    return new DrawableParticle(particleSystem, drawable);
                                 }
                             });
                             isTextureSetup = true;
