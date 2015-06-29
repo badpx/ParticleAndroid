@@ -184,22 +184,7 @@ public class ParticleSystem implements Runnable {
         mEmitterMode = EmitterMode.MODE_GRAVITY;
 
         mHandler = new Handler();
-        start();
-    }
-
-    // Stop the particle system right now and kill living particles.
-    public void shutdown() {
-        resetSystem();
-        mHandler.removeCallbacks(this);
-        stopSystem();
-    }
-
-    // Restart the particle system.
-    public void start() {
-        if (!mIsActive) {
-            mHandler.post(this);
-            startSystem();
-        }
+        startup();
     }
 
     public void setParticleFactory(ParticleFactory factory) {
@@ -685,37 +670,40 @@ public class ParticleSystem implements Runnable {
             particle.modeB.degreesPerSecond =
                     (float) Math.toRadians(modeB.rotatePerSecond + modeB.rotatePerSecondVar * randomMinus1To1());
         }
-
     }
 
-    // Start a died system.
-    public void startSystem() {
+    // Start the particle system.
+    public void startup() {
+        if (!mIsActive) {
+            mHandler.post(this);
+            startEmitting();
+        }
+    }
+
+    // Stop the particle system and kill all living particles right now.
+    public void shutdown() {
+        if (mIsActive) {
+            reset();
+            mHandler.removeCallbacks(this);
+            stopEmitting();
+        }
+    }
+
+    // Restart a died system to emitting again.
+    public void startEmitting() {
         mIsActive = true;
         mElapsed = 0;
     }
 
     //! stop emitting particles. Running particles will continue to run until they die
-    public void stopSystem() {
+    public void stopEmitting() {
         mIsActive = false;
         mElapsed = mDuration;
         mEmitCounter = 0;
     }
 
-    public void pauseSystem() {
-        mHandler.removeCallbacks(this);
-        mIsPaused = true;
-    }
-
-    public void resumeSystem() {
-        if (mIsPaused) {
-            mLastTimestamp = SystemClock.uptimeMillis();
-            mHandler.post(this);
-            mIsPaused = false;
-        }
-    }
-
-    //! Kill all living particles and restart.
-    public void resetSystem() {
+    //! Kill all living particles and restart emitting.
+    public void reset() {
         mIsActive = true;
         mElapsed = 0;
         for (mParticleIdx = 0; mParticleIdx < mParticleCount; ++mParticleIdx)
@@ -723,6 +711,24 @@ public class ParticleSystem implements Runnable {
             Particle p = mParticles[mParticleIdx];
             p.timeToLive = 0;
         }
+    }
+
+    // Frozen all particles util resume
+    public void pause() {
+        mHandler.removeCallbacks(this);
+        mIsPaused = true;
+    }
+
+    public void resume() {
+        if (mIsPaused) {
+            mLastTimestamp = SystemClock.uptimeMillis();
+            mHandler.post(this);
+            mIsPaused = false;
+        }
+    }
+
+    public boolean isPaused() {
+        return mIsPaused;
     }
 
     //! whether or not the system is full
@@ -757,7 +763,7 @@ public class ParticleSystem implements Runnable {
             mElapsed += dt;
             if (mDuration != -1 && mDuration < mElapsed)
             {
-                this.stopSystem();
+                this.stopEmitting();
             }
         }
 

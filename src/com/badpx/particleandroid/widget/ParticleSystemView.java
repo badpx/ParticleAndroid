@@ -60,7 +60,7 @@ public class ParticleSystemView extends View {
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
 
-        restartParticleSystems();
+        startupParticleSystems();
     }
 
     @Override
@@ -99,9 +99,9 @@ public class ParticleSystemView extends View {
         }
     }
 
-    void restartParticleSystems() {
+    void startupParticleSystems() {
         for (ParticleSystem particleSystem : mParticleSystems) {
-            particleSystem.start();
+            particleSystem.startup();
         }
     }
 

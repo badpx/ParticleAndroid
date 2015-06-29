@@ -143,6 +143,8 @@ public class EntryActivity extends Activity implements View.OnTouchListener,
         btn.setOnClickListener(this);
         btn = (Button) findViewById(R.id.group_mode);
         btn.setOnClickListener(this);
+        btn = (Button) findViewById(R.id.reset);
+        btn.setOnClickListener(this);
         btn = (Button) findViewById(R.id.prev);
         btn.setOnClickListener(this);
         btn = (Button) findViewById(R.id.next);
@@ -165,12 +167,12 @@ public class EntryActivity extends Activity implements View.OnTouchListener,
         int posY = getResources().getDisplayMetrics().heightPixels / 2;
 
         if (null != mParticleSystem) {
-            mParticleSystem.stopSystem();
+            mParticleSystem.stopEmitting();
         }
 
         mParticleSystem = PARTICLE_INFOS[mIndex].create(getResources());
         if (null != mParticleSystem) {
-            mParticleSystem.resetSystem();
+            mParticleSystem.reset();
             mTitle.setText(PARTICLE_INFOS[mIndex].toString());
 
             mParticleSystem.setPosition(posX, posY);
@@ -189,6 +191,9 @@ public class EntryActivity extends Activity implements View.OnTouchListener,
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.reset:
+                mParticleSystem.reset();
+                break;
             case R.id.free_mode:
                 mParticleSystem.setPositionType(ParticleSystem.PositionType.POSITION_FREE);
                 break;
@@ -198,13 +203,13 @@ public class EntryActivity extends Activity implements View.OnTouchListener,
                 break;
 
             case R.id.prev:
-                mParticleSystem.stopSystem();
+                mParticleSystem.stopEmitting();
                 mIndex = (0 == mIndex) ? PARTICLE_INFOS.length - 1 : mIndex - 1;
                 setupParticleSystem();
                 break;
 
             case R.id.next:
-                mParticleSystem.stopSystem();
+                mParticleSystem.stopEmitting();
                 mIndex = (PARTICLE_INFOS.length - 1 == mIndex) ? 0 : mIndex + 1;
                 setupParticleSystem();
                 break;

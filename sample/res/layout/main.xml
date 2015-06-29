@@ -4,9 +4,15 @@
                 android:layout_height="fill_parent">
 
     <LinearLayout
-        android:id="@+id/move_mode"
+        android:id="@+id/button_group"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" >
+
+        <Button
+                android:id="@+id/reset"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Reset"/>
 
         <Button
             android:id="@+id/free_mode"
@@ -31,20 +37,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Next"/>
+    </LinearLayout>
 
-        <TextView
+    <TextView
             android:id="@+id/name"
-            android:textSize="10sp"
+            android:textSize="12sp"
             android:singleLine="true"
+            android:layout_below="@id/button_group"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
-    </LinearLayout>
 
     <com.badpxx.sample.ParticleFpsView
         android:id="@+id/ps"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/move_mode"
+        android:layout_below="@id/name"
         android:layout_alignParentBottom="true"/>
 </RelativeLayout>
 
