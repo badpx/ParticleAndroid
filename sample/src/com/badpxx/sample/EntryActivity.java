@@ -37,7 +37,7 @@ public class EntryActivity extends Activity implements View.OnTouchListener,
         View.OnClickListener {
 
     interface ParticleSystemCreator {
-        public ParticleSystem create(Resources resources);
+        ParticleSystem create(Resources resources);
     }
 
     static class PresetCreator implements ParticleSystemCreator {
@@ -54,7 +54,7 @@ public class EntryActivity extends Activity implements View.OnTouchListener,
 
         @Override
         public String toString() {
-            return getClass().getSimpleName();
+            return particleSystem.getClass().getSimpleName();
         }
 
         public ParticleSystem create(Resources resources) {
@@ -107,22 +107,17 @@ public class EntryActivity extends Activity implements View.OnTouchListener,
             new PresetCreator(ParticleExplosion.class, R.drawable.fire, null),
             new PresetCreator(ParticleSnow.class, R.drawable.snow, null),
             new PresetCreator(ParticleSpin.class, R.drawable.stars, null),
-            new PListCreator("BurstPipe.plist"),
-            new PListCreator("Spiral.plist"),
-            new PListCreator("Phoenix.plist"),
+            new PListCreator("volcano.plist"),
             new PListCreator("lava_flow.plist"),
-            new PListCreator("Galaxy.plist"),
-            new PListCreator("debian.plist"),
-            new PListCreator("Flower.plist"),
-            new PListCreator("BoilingFoam.plist"),
             new PListCreator("Sun.plist"),
             new PListCreator("Upsidedown.plist"),
-            new PListCreator("volcano.plist"),
-//            new PListCreator("Comet.plist"),
-//            new PListCreator("ExplodingRing.plist"),
-//            new PListCreator("lines.plist"),
-//            new PListCreator("SmallSun.plist"),
-//            new PListCreator("SpinningPeas.plist"),
+            new PListCreator("BurstPipe.plist"),
+            new PListCreator("Phoenix.plist"),
+            new PListCreator("Galaxy.plist"),
+            new PListCreator("BoilingFoam.plist"),
+            new PListCreator("Spiral.plist"),
+            new PListCreator("Flower.plist"),
+            new PListCreator("debian.plist"),
     };
 
 
