@@ -1,6 +1,5 @@
 # ParticleAndroid
-
----
+===
 
 **A particle system for Android written in Java.**
 
@@ -23,13 +22,14 @@ We want to provide a lightweight particle system based on JAVA, for fast and eas
 ### Integrate ParticleSystemView
 The **ParticleSystemView** is a subclass of androd.view.View, It is responsible for managing the life cycle of particle emitters. It can be created directly or inflate from layout file:
 
-```
+```java
     // Create ParticleSystemView by code:
     ParticleSystemView particleSystemView = new ParticleSystemView(context);
-    rootLayout.addView(particleSystemView);
+    // Add it to your layout
+    rootView.addView(particleSystemView);
 ```
 
-```
+```xml
     <!-- Add in a layout xml file -->
     <com.badpx.particleandroid.widget.ParticleSystemView
         android:id="@+id/particle_view"
@@ -40,7 +40,7 @@ The **ParticleSystemView** is a subclass of androd.view.View, It is responsible 
 ### Create Particle Emitter
 A particle emitter must be a subclass of **ParticleSystem**, it can create by manual or plist file:
 
-```
+```java
 // Create particle emitter by manual
 public class ParticleExplosion extends ParticleSystem {
     public ParticleExplosion() {
@@ -104,7 +104,7 @@ public class ParticleExplosion extends ParticleSystem {
 ParticleSystem emitter = new ParticleExplosion();
 ```
 
-```
+```java
 // Create particle emitter by plist file
 ParticleSystem emitter = 
     PListParticleSystemHelper.create(resources, plistPath/* Relative to assets directory */);
@@ -112,7 +112,7 @@ ParticleSystem emitter =
 
 ### Setup emitter to ParticleSystemView
 
-```
+```java
 // Add one emitter to ParticleSystemView
 particleSystemView.addParticleSystem(emitter);
 // Start emitting
@@ -121,7 +121,7 @@ emitter.startup();
 
 ### Remove emitter
 
-```
+```java
 // Shutdown a emitter
 emitter.shutdown();
 // Remove a emitter from ParticleSystemView
