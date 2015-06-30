@@ -85,7 +85,7 @@ public class ParticleSystem implements Runnable {
     protected int mParticleCount;
     protected PositionType mPositionType = PositionType.POSITION_FREE;
     protected EmitterMode mEmitterMode;
-    protected int mInterval = 20;
+    protected int mInterval = 1000 / 60;
     protected Handler mHandler;
     /** Is the emitter active */
     boolean mIsActive = false;
@@ -197,6 +197,7 @@ public class ParticleSystem implements Runnable {
         mCallbackRef = new WeakReference<UpdateCallback>(callback);
     }
 
+    // Set frame update interval.
     public void setInterval(int interval) {
         mInterval = interval;
     }
@@ -672,7 +673,7 @@ public class ParticleSystem implements Runnable {
         }
     }
 
-    // Start the particle system.
+    /** Start the particle system.*/
     public void startup() {
         if (!mIsActive) {
             mHandler.post(this);
@@ -680,29 +681,31 @@ public class ParticleSystem implements Runnable {
         }
     }
 
-    // Stop the particle system and kill all living particles right now.
+    /** Stop the particle system and remove all living particles Immediately.*/
     public void shutdown() {
         if (mIsActive) {
             reset();
             mHandler.removeCallbacks(this);
             stopEmitting();
+
+            run();
         }
     }
 
-    // Restart a died system to emitting again.
+    /** Restart a died system to emitting again.*/
     public void startEmitting() {
         mIsActive = true;
         mElapsed = 0;
     }
 
-    //! stop emitting particles. Running particles will continue to run until they die
+    /** stop emitting particles. Running particles will continue to run until they die*/
     public void stopEmitting() {
         mIsActive = false;
         mElapsed = mDuration;
         mEmitCounter = 0;
     }
 
-    //! Kill all living particles and restart emitting.
+    /** Remove all living particles and restart emitting.*/
     public void reset() {
         mIsActive = true;
         mElapsed = 0;
@@ -713,12 +716,13 @@ public class ParticleSystem implements Runnable {
         }
     }
 
-    // Frozen all particles util resume
+    /** Pause emitting and freeze all living particles util resume */
     public void pause() {
         mHandler.removeCallbacks(this);
         mIsPaused = true;
     }
 
+    /** Resume emitting and unfreeze living particles. */
     public void resume() {
         if (mIsPaused) {
             mLastTimestamp = SystemClock.uptimeMillis();

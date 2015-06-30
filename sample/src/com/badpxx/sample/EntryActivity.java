@@ -162,17 +162,18 @@ public class EntryActivity extends Activity implements View.OnTouchListener,
         int posY = getResources().getDisplayMetrics().heightPixels / 2;
 
         if (null != mParticleSystem) {
-            mParticleSystem.stopEmitting();
+            // Stop previous particle emitter if it exists.
+            mParticleSystem.shutdown();
         }
 
         mParticleSystem = PARTICLE_INFOS[mIndex].create(getResources());
         if (null != mParticleSystem) {
-            mParticleSystem.reset();
             mTitle.setText(PARTICLE_INFOS[mIndex].toString());
 
-            mParticleSystem.setPosition(posX, posY);
-            mParticleSystem.setInterval(1000 / 60);
             particleView.addParticleSystem(mParticleSystem);
+            mParticleSystem.setPosition(posX, posY);
+
+            mParticleSystem.startup();
             particleView.setOnTouchListener(this);
         }
     }
@@ -198,13 +199,11 @@ public class EntryActivity extends Activity implements View.OnTouchListener,
                 break;
 
             case R.id.prev:
-                mParticleSystem.stopEmitting();
                 mIndex = (0 == mIndex) ? PARTICLE_INFOS.length - 1 : mIndex - 1;
                 setupParticleSystem();
                 break;
 
             case R.id.next:
-                mParticleSystem.stopEmitting();
                 mIndex = (PARTICLE_INFOS.length - 1 == mIndex) ? 0 : mIndex + 1;
                 setupParticleSystem();
                 break;
