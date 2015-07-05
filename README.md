@@ -22,12 +22,16 @@ We want to provide a lightweight particle system based on JAVA, for fast and eas
 ### Integrate ParticleSystemView
 The **ParticleSystemView** is a subclass of androd.view.View, It is responsible for managing the life cycle of particle emitters. It can be created directly or inflate from layout file:
 
+#### Create ParticleSystemView By code
+
 ```java
     // Create ParticleSystemView by code:
     ParticleSystemView particleSystemView = new ParticleSystemView(context);
     // Add it to your layout
     rootView.addView(particleSystemView);
 ```
+
+#### Create ParticleSystemView By xml
 
 ```xml
     <!-- Add in a layout xml file -->
@@ -39,6 +43,8 @@ The **ParticleSystemView** is a subclass of androd.view.View, It is responsible 
 
 ### Create Particle Emitter
 A particle emitter must be a subclass of **ParticleSystem**, it can create by manual or plist file:
+
+#### Create Particle Emitter By code
 
 ```java
 // Create particle emitter by manual
@@ -103,6 +109,8 @@ public class ParticleExplosion extends ParticleSystem {
 // Create particle emitter
 ParticleSystem emitter = new ParticleExplosion();
 ```
+
+#### Create Particle Emitter By plist file
 
 ```java
 // Create particle emitter by plist file
